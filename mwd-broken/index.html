@@ -1,0 +1,152 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MWD Broken</title>
+<style>
+:root{--red:#e0141e;--chrome:linear-gradient(180deg,#fafafa,#9a9a9a 45%,#e8e8e8 55%,#6b6b6b);}
+*{box-sizing:border-box}body{margin:0;background:#050505;color:#ddd;font-family:Segoe UI,Arial,sans-serif;min-height:100vh;position:relative}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.35;z-index:0;background:
+linear-gradient(115deg,transparent 49.6%,#3a0a0c 50%,transparent 50.4%) 0 0/340px 260px,
+linear-gradient(62deg,transparent 49.7%,#222 50%,transparent 50.3%) 40px 90px/220px 300px,
+linear-gradient(160deg,transparent 49.7%,#2a0507 50%,transparent 50.3%) 120px 30px/410px 190px,
+radial-gradient(ellipse at 50% 0,#2a0003 0,transparent 60%)}
+main,header,nav{position:relative;z-index:1}
+.plate{background:linear-gradient(180deg,#2b2b2b,#111 60%,#1b1b1b);border:2px solid #555;border-top-color:#999;border-radius:6px;box-shadow:0 0 18px rgba(224,20,30,.25),inset 0 1px 0 #777;position:relative}
+.plate::before,.plate::after{content:"";position:absolute;top:7px;width:10px;height:10px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,#888 40%,#222);box-shadow:0 0 0 1px #000}
+.plate::before{left:7px}.plate::after{right:7px}
+header{margin:14px auto;max-width:1200px;padding:16px;text-align:center}
+header img.logo{max-width:min(800px,100%);border-radius:4px;filter:drop-shadow(0 0 14px rgba(224,20,30,.6))}
+header .hero{position:absolute;right:20px;top:10px;height:150px;opacity:.85;filter:drop-shadow(0 0 12px #e0141e)}
+h1{margin:6px 0 0;font-size:28px;letter-spacing:6px;text-transform:uppercase;background:var(--chrome);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 1px rgba(224,20,30,.4)}
+nav{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:0 auto 14px;max-width:1200px}
+button,.btn{font:inherit;cursor:pointer;color:#111;font-weight:700;padding:9px 18px;border:1px solid #333;border-radius:4px;background:var(--chrome);box-shadow:0 2px 0 #000,inset 0 1px 0 #fff;text-transform:uppercase;letter-spacing:1px;font-size:13px}
+button:hover,.btn:hover{box-shadow:0 0 12px var(--red),inset 0 1px 0 #fff}
+nav button.active{background:linear-gradient(180deg,#ff4d55,#a0060d 55%,#e0141e);color:#fff;box-shadow:0 0 16px var(--red)}
+button.danger{background:linear-gradient(180deg,#ff5a60,#8a0007);color:#fff}
+main{max-width:1200px;margin:0 auto 40px;padding:20px 22px}
+.drop{border:2px dashed #777;border-radius:6px;padding:22px;text-align:center;margin:10px 0 16px;color:#aaa;transition:.2s}
+.drop.over{border-color:var(--red);box-shadow:0 0 20px var(--red) inset;color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.tile{position:relative;aspect-ratio:1;border:2px solid #444;border-radius:4px;overflow:hidden;background:#0b0b0b repeating-conic-gradient(#151515 0 25%,#0b0b0b 0 50%) 0 0/20px 20px}
+.tile:hover{border-color:var(--red);box-shadow:0 0 12px var(--red)}
+.tile img{width:100%;height:100%;object-fit:cover;cursor:zoom-in}.contain .tile img{object-fit:contain}
+.tile .x{position:absolute;top:4px;right:4px;padding:2px 8px;font-size:12px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:14px}
+.card{padding:26px 16px 16px}.card h3{margin:0 0 4px;color:#fff;text-shadow:0 0 8px var(--red)}.card p{white-space:pre-wrap;color:#bbb;margin:0 0 10px}
+.card .grid{grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:6px;margin:8px 0}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+input,textarea{width:100%;background:#0c0c0c;color:#eee;border:1px solid #555;border-radius:4px;padding:8px;font:inherit;margin:4px 0}
+input:focus,textarea:focus{outline:none;border-color:var(--red);box-shadow:0 0 8px var(--red)}
+.empty{color:#777;text-align:center;padding:20px}
+#lb{position:fixed;inset:0;background:rgba(0,0,0,.93);display:none;align-items:center;justify-content:center;z-index:9}
+#lb.on{display:flex}#lb img{max-width:92vw;max-height:88vh;border:2px solid #888;box-shadow:0 0 30px var(--red)}
+#lb button{position:absolute}#lbX{top:14px;right:14px}#lbP{left:14px}#lbN{right:14px}
+dialog{background:#111;color:#ddd;border:2px solid #777;border-radius:6px;width:min(480px,92vw);box-shadow:0 0 30px var(--red)}dialog::backdrop{background:rgba(0,0,0,.8)}
+.hidden{display:none}
+@media(max-width:700px){header .hero{display:none}}
+
+#topnav{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;max-width:1200px;margin:0 auto 12px;padding:0 8px;position:relative;z-index:1}
+#mute{position:absolute;left:16px;top:16px;padding:6px 10px;font-size:16px;z-index:2}
+.albums{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
+.atile{cursor:pointer;border-radius:8px;padding:6px;background:var(--chrome);box-shadow:0 0 16px rgba(224,20,30,.55);transition:.2s}
+.atile:hover{box-shadow:0 0 28px var(--red);transform:translateY(-2px)}
+.atile .cov{aspect-ratio:4/3;border-radius:5px;overflow:hidden;background:#0a0a0a;display:flex;align-items:center;justify-content:center;border:2px solid #222;position:relative}
+.atile .cov img,.atile .cov video{width:100%;height:100%;object-fit:cover}
+.ph{font-size:54px;color:#e0141e;text-shadow:0 0 14px #e0141e;font-weight:900;font-family:Georgia,serif}
+.atile .lab{display:flex;justify-content:space-between;color:#111;font-weight:800;padding:8px 6px 4px;text-transform:uppercase;letter-spacing:1px;font-size:13px}
+.play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.6);border:2px solid #ddd;box-shadow:0 0 12px var(--red);pointer-events:none;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px}
+.tile video{width:100%;height:100%;object-fit:cover;cursor:zoom-in}
+#lbV{max-width:92vw;max-height:88vh;border:2px solid #888;box-shadow:0 0 30px var(--red)}
+footer{position:sticky;bottom:0;z-index:3;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 46px;margin-top:20px;border-radius:0}
+.cb{position:relative;font:900 26px Georgia,serif;background:var(--chrome);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 6px #e0141e);padding-top:10px}
+.cb::before{content:"\265B";position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:15px;color:#e0141e;-webkit-text-fill-color:#e0141e}
+#toasts{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:20;display:flex;flex-direction:column;gap:6px;align-items:center}
+.toast{background:#111;border:1px solid #e0141e;box-shadow:0 0 14px #e0141e;color:#fff;padding:9px 14px;border-radius:5px;font-size:14px;max-width:90vw}
+select{background:#0c0c0c;color:#eee;border:1px solid #555;border-radius:4px;padding:8px;font:inherit}
+@media(max-width:600px){header .logo{max-width:100%}h1{font-size:20px;letter-spacing:3px}main{padding:16px 10px}.albums{grid-template-columns:1fr 1fr;gap:10px}.grid{grid-template-columns:repeat(3,1fr);gap:6px}footer{padding:8px 34px}button{padding:8px 10px;font-size:12px}}
+.tile .ed{position:absolute;top:4px;left:4px;padding:2px 7px;font-size:12px}.tile .cap{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,rgba(0,0,0,.9));color:#fff;font-size:11px;padding:14px 5px 4px;line-height:1.25;pointer-events:none}#lbC{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);color:#fff;background:rgba(0,0,0,.7);border:1px solid #e0141e;padding:6px 12px;border-radius:4px;max-width:90vw;text-align:center}table.log{width:100%;border-collapse:collapse;font-size:13px}table.log th{position:sticky;top:0;background:#222;color:#fff}table.log td,table.log th{border:1px solid #333;padding:5px;text-align:left}table.log tr:nth-child(even){background:#111}
+</style></head><body>
+<header class="plate"><button id="mute" title="Mute/unmute">&#128266;</button><img class="hero" src="assets/hero.png" alt=""><img class="logo" src="assets/logo.jpg" alt="Broken by Mark Waldo Designs"><h1>MWD Broken</h1></header>
+<nav id="topnav"></nav>
+<main class="plate" id="view"></main>
+<div id="lb"><img id="lbI" alt=""><div id="lbC"></div><video id="lbV" controls playsinline class="hidden"></video><button id="lbX">Close</button><button id="lbP">&#9664;</button><button id="lbN">&#9654;</button></div>
+<dialog id="dlg"><form method="dialog" id="mf"><h3 id="dt">Model</h3><label>Name<input id="mn" required></label><label>Notes<textarea id="mo" rows="5"></textarea></label><div class="row"><button value="ok" id="msave">Save</button><button value="cancel" formnovalidate>Cancel</button></div></form></dialog>
+<footer class="plate"><span class="cb">B</span><div class="row"><button id="upBtn">Upload</button><button id="dupBtn">Erase duplicates</button></div><span class="cb">B</span></footer><div id="toasts"></div><audio id="song" loop src="__SONG__"></audio>
+<script src="assets/manifest.js"></script>
+<script>
+const ALBUMS=[{id:'models',name:'Models'},{id:'photos',name:'Regular Photos'},{id:'apparel',name:'Apparel PNGs',contain:1},{id:'clothing',name:'Clothing Photos'},{id:'videos',name:'Videos',video:1}];
+const $=id=>document.getElementById(id);
+const MAN=window.MWD_MANIFEST||{profiles:[],items:[]};const BI=MAN.items;const BIH=new Map();BI.forEach(b=>{BIH.set(b.hash,b);BIH.set('ns:'+b.file+':'+b.size,b);});
+const ED=JSON.parse(localStorage.getItem('mwdEdits')||'{}'),PN=JSON.parse(localStorage.getItem('mwdProfiles')||'{}');
+const pn=p=>p?(PN[p]||p):'';BI.forEach(b=>Object.assign(b,ED[b.id]||{}));
+async function saveEd(it,ch){Object.assign(it,ch);if(it.src){ED[it.id]={...(ED[it.id]||{}),...ch};localStorage.setItem('mwdEdits',JSON.stringify(ED));}else await put('images',it);}
+async function newTag(){const u=await all('images');let m=0;[...BI,...u].forEach(i=>{const n=+(String(i.tag||'').match(/BRK-(\d+)/)||[])[1];if(n>m)m=n;});return 'BRK-'+String(m+1).padStart(4,'0');}
+const label=it=>it.album==='models'||(!it.name&&it.model)?pn(typeof it.model==='string'?it.model.replace(/^b:/,''):it.modelName||''):'';
+let q='';
+let db,cur='home',urls=[],lbList=[],lbIdx=0,songWasPlaying=false;
+// ---- song ----
+const song=$('song');let muted=localStorage.getItem('mwdMuted')==='1';
+function hasSong(){return song.getAttribute('src')&&!song.getAttribute('src').startsWith('__');}
+function syncMute(){song.muted=muted;$('mute').innerHTML=muted?'&#128263;':'&#128266;';}
+syncMute();if(!hasSong())$('mute').classList.add('hidden');
+function startSong(){if(hasSong()&&song.paused&&!$('lbV').src)song.play().catch(()=>{});}
+document.addEventListener('pointerdown',startSong,{once:true});
+$('mute').onclick=e=>{e.stopPropagation();muted=!muted;localStorage.setItem('mwdMuted',muted?'1':'0');syncMute();if(!muted)song.play().catch(()=>{});};
+// ---- db ----
+function openDB(){return new Promise((res,rej)=>{const r=indexedDB.open('mwd-broken',2);r.onupgradeneeded=ev=>{const d=r.result;let s;if(ev.oldVersion<1){s=d.createObjectStore('images',{keyPath:'id',autoIncrement:true});s.createIndex('album','album');s.createIndex('model','model');d.createObjectStore('models',{keyPath:'id',autoIncrement:true});}else s=r.transaction.objectStore('images');if(!s.indexNames.contains('hash'))s.createIndex('hash','hash');};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});}
+function tx(store,mode,fn){return new Promise((res,rej)=>{const t=db.transaction(store,mode);const s=t.objectStore(store);let out;const r=fn(s);if(r)r.onsuccess=()=>out=r.result;t.oncomplete=()=>res(out);t.onerror=()=>rej(t.error);});}
+const all=st=>tx(st,'readonly',s=>s.getAll());
+const dbIdx=(idx,v)=>tx('images','readonly',s=>s.index(idx).getAll(v));
+const byIdx=async(idx,v)=>{const u=await dbIdx(idx,v);if(idx==='hash')return u;const b=BI.filter(x=>idx==='album'?x.album===v:x.model===v);return [...b,...u];};
+const put=(st,o)=>tx(st,'readwrite',s=>s.put(o));
+const del=(st,id)=>tx(st,'readwrite',s=>s.delete(id));
+// ---- hashing / dedupe ----
+async function hashOf(blob,name){try{if(crypto&&crypto.subtle){const b=await crypto.subtle.digest('SHA-256',await blob.arrayBuffer());return 'sha256:'+[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');}}catch(e){}return 'ns:'+name+':'+blob.size;}
+async function ensureHashes(){const imgs=await all('images');for(const i of imgs)if(!i.hash){i.hash=await hashOf(i.blob,i.name);await put('images',i);}return imgs;}
+function where(it,models){if(it.album==='models'){const m=typeof it.model==='string'?{name:it.model.replace(/^b:/,'')}:models.find(x=>x.id===it.model);return 'Models'+(m?' ('+pn(m.name)+')':'');}return (ALBUMS.find(a=>a.id===it.album)||{}).name||it.album;}
+function toast(msg){const d=el(`<div class="toast">${esc(msg)}</div>`);$('toasts').appendChild(d);setTimeout(()=>d.remove(),4200);}
+function okType(f,album){return album==='videos'?f.type.startsWith('video/'):f.type.startsWith('image/');}
+async function addFiles(files,album,model){const models=await all('models');let added=0;for(const f of files){if(!okType(f,album)){toast('Skipped (wrong type for '+where({album,model},models)+'): '+f.name);continue;}const h=await hashOf(f,f.name);const dup=BIH.get(h)||BIH.get('ns:'+f.name+':'+f.size)||(await dbIdx('hash',h))[0];if(dup){toast('Already in '+where(dup,models)+(dup.tag?' ['+dup.tag+(dup.name?' '+dup.name:'')+']':'')+': '+f.name);continue;}const tg=(album==='apparel'||album==='clothing')?await newTag():'';await put('images',{album,model:model??null,file:f.name,tag:tg,name:tg?f.name.replace(/\.[^.]+$/,''):'',type:f.type,blob:f,hash:h,added:Date.now()});added++;}if(added)toast('Added '+added+' file'+(added>1?'s':'')+' to '+where({album,model},models));render();}
+async function eraseDups(){const imgs=(await ensureHashes()).sort((a,b)=>(a.added||0)-(b.added||0)||a.id-b.id);const seen=new Set(BI.map(b=>b.hash));let n=0;for(const i of imgs){if(seen.has(i.hash)){await del('images',i.id);n++;}else seen.add(i.hash);}toast(n?('Removed '+n+' duplicate'+(n>1?'s':'')):'No duplicates found');render();}
+// ---- helpers ----
+function url(b){const u=URL.createObjectURL(b);urls.push(u);return u;}
+function el(h){const t=document.createElement('template');t.innerHTML=h.trim();return t.content.firstChild;}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function picker(accept,cb){const i=document.createElement('input');i.type='file';i.accept=accept;i.multiple=true;i.onchange=()=>cb(i.files);i.click();}
+const acc=a=>a==='videos'?'video/*':'image/*';
+function dropZone(label,album,cb){const d=el(`<div class="drop">${label}<br><br><button type="button">Choose Files</button></div>`);d.querySelector('button').onclick=()=>picker(acc(album),cb);['dragenter','dragover'].forEach(e=>d.addEventListener(e,ev=>{ev.preventDefault();d.classList.add('over');}));['dragleave','drop'].forEach(e=>d.addEventListener(e,ev=>{ev.preventDefault();d.classList.remove('over');}));d.addEventListener('drop',ev=>cb(ev.dataTransfer.files));return d;}
+const isVid=it=>(it.type||'').startsWith('video/');
+function media(it,u){if(it.src)return `<img src="${u}" loading="lazy" alt="${esc(it.name)}">`;return isVid(it)?`<video src="${u}#t=0.5" muted preload="metadata" playsinline></video><span class="play">&#9654;</span>`:`<img src="${u}" alt="${esc(it.name)}">`;}
+function cap(it){const who=it.model?pn(String(it.model).replace(/^b:/,'')):'';return [it.tag,it.name,who&&('Model: '+who)].filter(Boolean).join(' · ')||it.file||'';}
+function grid(items){if(q){const s=q.toLowerCase();items=items.filter(i=>[i.name,i.tag,i.file,pn(String(i.model||'').replace(/^b:/,''))].join(' ').toLowerCase().includes(s));}const g=el('<div class="grid"></div>');if(!items.length)g.appendChild(el('<div class="empty">Nothing here yet</div>'));const list=items.map(i=>i.src?{u:i.src,t:i.thumb,v:false,it:i}:{u:url(i.blob),v:isVid(i),it:i});items.forEach((it,k)=>{const t=el(`<div class="tile" title="${esc(it.name)}">${media(it,list[k].t||list[k].u)}${it.src?'':'<button class="x danger" title="Delete">&#10005;</button>'}<button class="ed" title="Edit name/tag">&#9998;</button><div class="cap">${esc(cap(it))}</div></div>`);t.querySelector('.ed').onclick=()=>editItem(it);t.firstChild.onclick=()=>openLB(list,k);if(!it.src)t.querySelector('.x').onclick=async()=>{if(confirm('Delete '+it.name+'?')){await del('images',it.id);render();}};g.appendChild(t);});return g;}
+// ---- lightbox ----
+const lbV=$('lbV'),lbI=$('lbI');
+async function editItem(it){const ch={};const cl=it.album==='apparel'||it.album==='clothing';if(cl){const n=prompt('Item name',it.name||'');if(n===null)return;ch.name=n.trim();const g=prompt('Tag number',it.tag||await newTag());if(g===null)return;ch.tag=g.trim();}if(typeof it.model==='string'||it.album==='models'||it.model){const cur0=String(it.model||'').replace(/^b:/,'');const m=prompt('Model name (blank for none)',pn(cur0));if(m!==null){const nm=m.trim();const orig=Object.keys(PN).find(k=>PN[k]===nm)||nm;ch.model=it.src?(orig||null):(orig?'b:'+orig:null);}}if(Object.keys(ch).length){await saveEd(it,ch);toast('Saved');render();}}
+function openLB(list,k){lbList=list;lbIdx=k;showLB();lb.classList.add('on');}
+function stopVid(){lbV.pause();lbV.removeAttribute('src');lbV.load();}
+function showLB(){const x=lbList[lbIdx];$('lbC').textContent=x.it?cap(x.it):'';stopVid();if(x.v){lbI.classList.add('hidden');lbV.classList.remove('hidden');lbV.src=x.u;lbV.play().catch(()=>{});}else{lbV.classList.add('hidden');lbI.classList.remove('hidden');lbI.src=x.u;}}
+function closeLB(){stopVid();lb.classList.remove('on');}
+lbV.addEventListener('play',()=>{if(!song.paused){songWasPlaying=true;song.pause();}});
+['pause','ended','emptied'].forEach(ev=>lbV.addEventListener(ev,()=>{if(songWasPlaying&&lbV.paused){songWasPlaying=false;song.play().catch(()=>{});}}));
+function step(d){if(!lbList.length)return;lbIdx=(lbIdx+d+lbList.length)%lbList.length;showLB();}
+lbX.onclick=closeLB;lbP.onclick=()=>step(-1);lbN.onclick=()=>step(1);
+lb.onclick=e=>{if(e.target===lb)closeLB();};
+document.addEventListener('keydown',e=>{if(!lb.classList.contains('on'))return;if(e.key==='Escape')closeLB();if(e.key==='ArrowLeft')step(-1);if(e.key==='ArrowRight')step(1);});
+// ---- upload dialog (pick destination) ----
+async function uploadDialog(){const models=await all('models');const opts=ALBUMS.filter(a=>a.id!=='models').map(a=>`<option value="${a.id}">${a.name}</option>`).join('')+MAN.profiles.map(p=>`<option value="m:b:${esc(p)}">Model: ${esc(p)}</option>`).join('')+models.map(m=>`<option value="m:${m.id}">Model: ${esc(m.name)}</option>`).join('');
+const d=el(`<dialog><h3>Upload files</h3><label>Destination<br><select id="dest" style="width:100%">${opts}</select></label><p style="color:#999;font-size:13px">Pick one or more files. Duplicates already anywhere in the app are skipped.</p><div class="row"><button id="go">Choose files</button><button id="cx">Cancel</button></div></dialog>`);document.body.appendChild(d);
+const pre=cur.startsWith('m:')?cur:(ALBUMS.find(a=>a.id===cur&&a.id!=='models')?cur:'');if(pre)d.querySelector('#dest').value=pre;
+d.querySelector('#cx').onclick=()=>{d.close();d.remove();};d.querySelector('#go').onclick=()=>{const v=d.querySelector('#dest').value;d.close();d.remove();if(v.startsWith('m:'))picker('image/*',f=>addFiles(f,'models',v.startsWith('m:b:')?v.slice(2):+v.slice(2)));else picker(acc(v),f=>addFiles(f,v));};d.showModal();}
+$('upBtn').onclick=uploadDialog;$('dupBtn').onclick=eraseDups;
+// ---- models ----
+function editModel(m){dt.textContent=m?'Edit Model':'New Model';mn.value=m?.name||'';mo.value=m?.notes||'';dlg.returnValue='';dlg.showModal();dlg.onclose=async()=>{if(dlg.returnValue!=='ok'||!mn.value.trim())return;const o=m?{...m}:{created:Date.now()};o.name=mn.value.trim();o.notes=mo.value;await put('models',o);render();};}
+async function renderModels(v){v.appendChild(el('<div class="row"><h2 style="margin:0;flex:1">Models</h2><button id="newm">+ New Model</button></div>'));v.querySelector('#newm').onclick=()=>editModel();const ms=await all('models');const c=el('<div class="cards"></div>');
+for(const p of MAN.profiles){const imgs=[...BI.filter(x=>x.model===p||(x.model||'').split(' & ').includes(p)),...await dbIdx('model','b:'+p)];if(q&&!pn(p).toLowerCase().includes(q.toLowerCase())&&!imgs.some(i=>cap(i).toLowerCase().includes(q.toLowerCase())))continue;const card=el(`<div class="card plate"><h3>${esc(pn(p))}</h3><p>${imgs.length} photo${imgs.length===1?'':'s'}</p></div>`);const rn=el('<button>Rename</button>');rn.onclick=()=>{const n=prompt('Model name',pn(p));if(n&&n.trim()){PN[p]=n.trim();localStorage.setItem('mwdProfiles',JSON.stringify(PN));render();}};card.appendChild(rn);card.appendChild(grid(imgs));card.appendChild(dropZone('Drop photos for '+esc(p),'models',f=>addFiles(f,'models','b:'+p)));c.appendChild(card);}
+for(const m of ms){const imgs=await byIdx('model',m.id);const card=el(`<div class="card plate"><h3>${esc(m.name)}</h3><p>${esc(m.notes||'')}</p></div>`);card.appendChild(grid(imgs));card.appendChild(dropZone('Drop photos for '+esc(m.name),'models',f=>addFiles(f,'models',m.id)));const r=el('<div class="row"><button>Edit</button><button class="danger">Delete</button></div>');r.children[0].onclick=()=>editModel(m);r.children[1].onclick=async()=>{if(!confirm('Delete model "'+m.name+'" and their photos?'))return;for(const i of imgs)await del('images',i.id);await del('models',m.id);render();};card.appendChild(r);c.appendChild(card);}v.appendChild(c);}
+// ---- home ----
+async function renderHome(v){v.appendChild(el('<h2 style="margin:0 0 14px">Albums</h2>'));const g=el('<div class="albums"></div>');for(const a of ALBUMS){const items=(await byIdx('album',a.id)).sort((x,y)=>(y.added||0)-(x.added||0));const latest=items.find(i=>!i.src)||items.find(i=>i.src);const cov=latest?media(latest,latest.src?latest.thumb:url(latest.blob)):'<span class="ph">B</span>';const t=el(`<div class="atile"><div class="cov">${cov}</div><div class="lab"><span>${a.name}</span><span>${items.length} file${items.length===1?'':'s'}</span></div></div>`);t.onclick=()=>{cur=a.id;render();};g.appendChild(t);}v.appendChild(g);}
+async function logRows(){const u=await all('images');const ms=await all('models');const rows=BI.map(b=>({file:b.file,album:b.album,model:pn(b.model||''),name:b.name||'',tag:b.tag||'',note:b.note||'',src:'built-in'}));(MAN.log||[]).filter(l=>l.album==='(dropped)').forEach(l=>rows.push({...l,src:'built-in'}));u.forEach(i=>{const m=typeof i.model==='string'?pn(i.model.slice(2)):((ms.find(x=>x.id===i.model)||{}).name||'');rows.push({file:i.file||i.name,album:i.album,model:m,name:i.file?i.name:'',tag:i.tag||'',note:'',src:'uploaded'});});return rows;}
+async function renderLog(v){const rows=await logRows();const an=id=>(ALBUMS.find(a=>a.id===id)||{}).name||id;v.appendChild(el(`<div class="row"><h2 style="margin:0;flex:1">Log (${rows.length} files)</h2><button id="csv">Download CSV</button></div>`));const s=el(`<input placeholder="Filter log…" value="${esc(q)}">`);v.appendChild(s);const tb=el('<div style="overflow:auto;max-height:70vh"><table class="log"><thead><tr><th>File</th><th>Album</th><th>Model</th><th>Item name</th><th>Tag</th><th>Note</th><th>Source</th></tr></thead><tbody></tbody></table></div>');v.appendChild(tb);const body=tb.querySelector('tbody');const draw=()=>{const f=s.value.toLowerCase();body.innerHTML=rows.filter(r=>Object.values(r).join(' ').toLowerCase().includes(f)).map(r=>`<tr><td>${esc(r.file)}</td><td>${esc(an(r.album))}</td><td>${esc(r.model)}</td><td>${esc(r.name)}</td><td>${esc(r.tag)}</td><td>${esc(r.note)}</td><td>${r.src}</td></tr>`).join('');};s.oninput=draw;draw();
+v.querySelector('#csv').onclick=()=>{const c=v=>'"'+String(v??'').replace(/"/g,'""')+'"';const txt=['file,album,model,name,tag,note,source',...rows.map(r=>[r.file,an(r.album),r.model,r.name,r.tag,r.note,r.src].map(c).join(','))].join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'text/csv'}));a.download='mwd-broken-log.csv';a.click();};}
+async function render(){urls.forEach(u=>URL.revokeObjectURL(u));urls=[];const nav=$('topnav');nav.innerHTML='';[{id:'home',name:'Home'},...ALBUMS,{id:'log',name:'Log'}].forEach(a=>{const b=el(`<button class="${a.id===cur?'active':''}">${a.name}</button>`);b.onclick=()=>{cur=a.id;q='';render();};nav.appendChild(b);});const v=$('view');v.innerHTML='';v.className='plate';
+if(cur==='log')return renderLog(v);if(cur!=='home'){const sb=el(`<input id="srch" placeholder="Search name, tag (BRK-0001), model, file…" value="${esc(q)}">`);sb.oninput=()=>{q=sb.value;clearTimeout(window._st);window._st=setTimeout(async()=>{await render();const s=$('srch');s.focus();s.setSelectionRange(q.length,q.length);},250);};v.appendChild(sb);}
+if(cur==='home')return renderHome(v);if(cur==='models')return renderModels(v);const a=ALBUMS.find(x=>x.id===cur);if(a.contain)v.classList.add('contain');v.appendChild(el(`<h2 style="margin:0">${a.name}</h2>`));v.appendChild(dropZone(a.video?'Drag &amp; drop videos here':'Drag &amp; drop images here',a.id,f=>addFiles(f,cur)));v.appendChild(grid((await byIdx('album',cur)).sort((x,y)=>(x.added||0)-(y.added||0))));}
+openDB().then(async d=>{db=d;await ensureHashes();render();}).catch(e=>{$('view').textContent='IndexedDB unavailable: '+e;});
+</script></body></html>
