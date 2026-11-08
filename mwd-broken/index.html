@@ -156,13 +156,13 @@ nav button.active,#topnav button.active{background:linear-gradient(180deg,#ff3b4
 .arr{padding:8px 6px}.addc{margin-top:8px;font-size:11px}
 @media(max-width:800px){.tryon{grid-template-columns:1fr}.tcenter{order:-1}.tstage{height:50vh;min-height:340px}.mcards{flex-direction:row;overflow-x:auto;max-height:none}.mcard{flex:0 0 150px}.rctl{gap:5px}.rctl button{width:50px;height:50px;font-size:7px}.rctl button i{font-size:15px}.tbot{padding:8px 22px}.hdr .cskull{font-size:24px}}
 .tryonwrap{max-width:100%;overflow:hidden}.tryon>*{min-width:0}.tcenter,.tbot{min-width:0}
-</style></head><body>
+@media(max-width:480px){.hdr{padding:8px 10px;gap:4px}.hdr .logo{max-width:46%;min-width:0}.hdr button{flex:0 0 auto;padding:6px 8px}.hdr .cb.big{font-size:20px}.hdr .cskull{font-size:18px}}</style></head><body>
 <header class="plate hdr"><button id="burger" title="Menu">&#9776;</button><span class="cb big">B</span><img class="logo" src="assets/logo.jpg" alt="Broken by Mark Waldo Designs"><span class="cskull" title="Broken">&#9760;</span><button id="gear" title="Settings">&#9881;</button><button id="mute" class="hidden" title="Mute/unmute">&#128266;</button></header>
 <nav id="topnav"></nav>
 <main class="plate" id="view"></main>
 <div id="lb"><img id="lbI" alt=""><div id="lbC"></div><video id="lbV" controls playsinline class="hidden"></video><button id="lbX">Close</button><button id="lbP">&#9664;</button><button id="lbN">&#9654;</button></div>
 <dialog id="dlg"><form method="dialog" id="mf"><h3 id="dt">Model</h3><label>Name<input id="mn" required></label><label>Notes<textarea id="mo" rows="5"></textarea></label><div class="row"><button value="ok" id="msave">Save</button><button value="cancel" formnovalidate>Cancel</button></div></form></dialog>
-<footer class="plate bbar"><span class="cb">B</span><button data-go="favs">&#9733;<br>Favorites</button><button data-go="backup">&#128190;<br>Backup</button><button data-go="stats">&#128202;<br>Stats</button><button data-go="cart">&#128722;<br>Cart <b id="cartN"></b></button><button data-go="trash">&#128465;<br>Trash</button><span class="cb">B</span></footer><div class="hidden"><button id="upBtn"></button><button id="dupBtn"></button></div><div id="toasts"></div><audio id="song" loop src="__SONG__"></audio>
+<footer class="plate bbar"><span class="cb">B</span><button data-go="favs">&#9733;<br>Favorites</button><button data-go="backup">&#128190;<br>Backup</button><button data-go="stats">&#128202;<br>Stats</button><button data-go="cart">&#128722;<br>Cart <b id="cartN"></b></button><button data-go="trash">&#128465;<br>Trash</button><span class="cb">B</span></footer><div class="hidden"><button id="upBtn"></button><button id="dupBtn"></button></div><div id="toasts"></div><audio id="song" loop src="assets/theme.mp3" preload="none"></audio>
 <script src="assets/manifest.js"></script>
 <script type="importmap">{"imports":{"three":"./assets/3d/three.module.min.js"}}</script>
 <script type="module" src="assets/3d/stage3d.js"></script>
@@ -184,7 +184,7 @@ let db,cur='home',urls=[],lbList=[],lbIdx=0,songWasPlaying=false;
 const song=$('song');let muted=localStorage.getItem('mwdMuted')==='1';
 function hasSong(){return song.getAttribute('src')&&!song.getAttribute('src').startsWith('__');}
 function syncMute(){song.muted=muted;$('mute').innerHTML=muted?'&#128263;':'&#128266;';}
-syncMute();if(!hasSong())$('mute').classList.add('hidden');
+syncMute();$('mute').classList.toggle('hidden',!hasSong());
 function startSong(){if(hasSong()&&song.paused&&!$('lbV').src)song.play().catch(()=>{});}
 document.addEventListener('pointerdown',startSong,{once:true});document.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b){cur=b.dataset.go;q='';render();scrollTo(0,0);}});
 $('gear').onclick=()=>{cur='more';render();};$('burger').onclick=()=>{cur='more';render();};$('mute').onclick=e=>{e.stopPropagation();muted=!muted;localStorage.setItem('mwdMuted',muted?'1':'0');syncMute();if(!muted)song.play().catch(()=>{});};
