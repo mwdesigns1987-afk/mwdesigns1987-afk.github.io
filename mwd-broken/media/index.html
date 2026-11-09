@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>Media · Broken by Mark Waldo Designs</title>
+<link rel="stylesheet" href="../assets/broken-ui.css"/>
+<style>
+*{box-sizing:border-box}html,body{margin:0;background:#0a0a0c;color:#e8e8ec;min-height:100%}
+body{padding-bottom:72px;overflow-x:hidden;background:
+  radial-gradient(ellipse at 50% 0%,rgba(224,20,30,.12),transparent 55%),
+  repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(255,255,255,.015) 3px,rgba(255,255,255,.015) 4px),
+  #0a0a0c}
+.plate{background:linear-gradient(180deg,#1a1b1f,#0e0f12);border:1px solid #2a2c32;border-radius:10px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 0 0 1px rgba(0,0,0,.6),0 8px 24px rgba(0,0,0,.45);position:relative}
+.plate::before,.plate::after{content:'';position:absolute;width:7px;height:7px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#ddd,#555 55%,#222);box-shadow:0 0 0 1px #000}
+.plate::before{top:7px;left:7px}.plate::after{top:7px;right:7px}
+.hdr{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 14px;margin:8px 10px 0;max-width:520px}
+.hdr .logo{max-width:min(220px,48%);display:block;margin:0 auto;filter:drop-shadow(0 0 10px rgba(224,20,30,.55))}
+.hdr button{background:linear-gradient(180deg,#3a3d45,#1a1c20);border:1px solid #555;border-radius:8px;color:#eee;padding:8px;cursor:pointer}
+.rule{height:2px;margin:10px 14px 0;background:linear-gradient(90deg,transparent,#e0141e 20%,#ff4d5a 50%,#e0141e 80%,transparent);
+  box-shadow:0 0 10px #e0141e,0 0 22px rgba(224,20,30,.55);border:0}
+.searchrow{display:flex;gap:8px;padding:6px 14px 0;max-width:520px;margin:0 auto}
+.searchrow input{flex:1;background:#121316;border:1px solid #333;border-radius:8px;color:#eee;padding:10px 12px 10px 36px;font:500 15px 'BRK Body',sans-serif}
+.wrap{max-width:520px;margin:0 auto;padding:6px 14px 8px}
+.title{font-family:'BRK Wet',cursive;font-size:26px;margin:4px 0 2px;text-align:center;
+  background:linear-gradient(180deg,#fff 0%,#c9d0d8 42%,#3b4047 50%,#eef2f6 72%,#8a929c 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-stroke:.5px rgba(255,40,50,.5);
+  filter:drop-shadow(0 0 6px rgba(255,20,35,.7))}
+.sub{text-align:center;color:#9aa0a8;font:500 13px 'BRK Body',sans-serif;margin:0 0 10px;letter-spacing:.04em}
+.stage{padding:10px;margin:0 auto;--glow:.22;
+  border:2px solid rgba(224,20,30,calc(.4 + var(--glow)*.4));
+  box-shadow:0 0 calc(10px + var(--glow)*14px) rgba(224,20,30,calc(.4 + var(--glow)*.35)),
+             0 0 calc(24px + var(--glow)*20px) rgba(255,30,50,calc(.12 + var(--glow)*.25)),
+             inset 0 0 14px rgba(224,20,30,.1);
+  animation:softGlow 3.6s ease-in-out infinite}
+@keyframes softGlow{0%,100%{--glow:.18}50%{--glow:.42}}
+.vframe{position:relative;aspect-ratio:9/16;max-height:min(36vh,300px);margin:0 auto;background:#050506;
+  border-radius:6px;overflow:hidden;border:1px solid #222;box-shadow:inset 0 0 40px rgba(0,0,0,.8)}
+#ytHost,#vid{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
+#vid{display:none;object-fit:contain}
+.pending{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  background:radial-gradient(ellipse at 50% 40%,rgba(224,20,30,.18),transparent 60%),#08080a;z-index:2;padding:24px;text-align:center}
+.pending.show{display:flex}
+.pending h2{font-family:'BRK Wet',cursive;font-size:22px;margin:0;color:#fff;text-shadow:0 0 10px #e0141e}
+.pending p{margin:0;color:#aab0b8;font:500 14px 'BRK Body',sans-serif;max-width:260px;line-height:1.35}
+.tap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;display:none;
+  background:rgba(10,10,12,.82);border:1px solid #e0141e;color:#fff;padding:12px 18px;border-radius:999px;
+  font:700 14px 'BRK Bebas',sans-serif;letter-spacing:.1em;cursor:pointer;box-shadow:0 0 16px rgba(224,20,30,.7)}
+.tap.show{display:block}
+.note{font:500 11px 'BRK Body',sans-serif;color:#7a8088;text-align:center;margin:6px 0 0;letter-spacing:.03em}
+.meta{display:flex;justify-content:space-between;gap:8px;padding:8px 4px 0;font:500 12px 'BRK Body',sans-serif;color:#8a9098}
+.meta b{color:#d0d4da;font-weight:700}
+.progress{display:grid;grid-template-columns:44px 1fr 44px;gap:8px;align-items:center;padding:8px 2px 0}
+.progress input[type=range]{width:100%;accent-color:#e0141e;height:4px}
+.progress span{font:700 11px 'BRK Bebas',sans-serif;letter-spacing:.06em;color:#b8bcc2;text-align:center}
+.ctrls{display:flex;justify-content:center;align-items:center;gap:14px;padding:10px 0 4px}
+.ctrls button{width:52px;height:52px;border-radius:50%;cursor:pointer;color:#fff;
+  background:linear-gradient(160deg,#f2f4f7 0%,#9aa3ad 40%,#3a3f46 52%,#e6ebf0 78%,#7d8590 100%);
+  border:1px solid #222;box-shadow:0 0 0 2px rgba(224,20,30,.35),0 0 14px rgba(224,20,30,.45),inset 0 1px 0 rgba(255,255,255,.55);
+  display:grid;place-items:center;padding:0}
+.ctrls button.main{width:64px;height:64px;box-shadow:0 0 0 2px rgba(224,20,30,.55),0 0 22px rgba(224,20,30,.65),inset 0 1px 0 rgba(255,255,255,.6)}
+.ctrls button:disabled{opacity:.35;cursor:not-allowed;filter:grayscale(.4)}
+.ctrls button.on{box-shadow:0 0 0 2px #ff2a3a,0 0 22px #e0141e,inset 0 1px 0 rgba(255,255,255,.6)}
+.ctrls svg.bic{width:26px;height:26px;margin:0!important}.ctrls .main svg.bic{width:30px;height:30px}
+.vol{display:grid;grid-template-columns:28px 1fr 40px;gap:10px;align-items:center;padding:4px 6px 8px}
+.vol input[type=range]{width:100%;accent-color:#e0141e}
+.vol span{font:700 12px 'BRK Bebas',sans-serif;color:#b8bcc2;text-align:right}
+.row2{display:flex;justify-content:center;gap:10px;padding:0 0 8px}
+.row2 button{background:linear-gradient(180deg,#2c2f36,#15171b);border:1px solid #444;color:#eee;border-radius:8px;
+  padding:8px 12px;font:700 12px 'BRK Bebas',sans-serif;letter-spacing:.08em;cursor:pointer;box-shadow:0 0 8px rgba(224,20,30,.25)}
+.row2 button:disabled{opacity:.35;cursor:not-allowed}
+.bbar{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-around;gap:2px;padding:8px 6px calc(8px + env(safe-area-inset-bottom));
+  background:linear-gradient(180deg,#1c1d22,#0c0d10);border-top:1px solid #333;z-index:20;box-shadow:0 -8px 24px rgba(0,0,0,.5)}
+.bbar a{flex:1;text-align:center;text-decoration:none;color:#c8ccd2;font:700 11px 'BRK Tag',cursive;letter-spacing:.02em;padding:6px 2px;border-radius:8px}
+.bbar a svg.bic{display:block;margin:0 auto 3px!important;width:22px;height:22px}
+.bbar a[aria-current=page]{color:#fff;background:rgba(224,20,30,.18);box-shadow:inset 0 0 0 1px rgba(224,20,30,.5)}
+@media(max-width:400px){.ctrls{gap:10px}.ctrls button{width:46px;height:46px}.ctrls button.main{width:58px;height:58px}}
+@media(prefers-reduced-motion:reduce){.stage{animation:none!important;--glow:.22!important}}
+</style>
+</head>
+<body>
+<header class="plate hdr">
+  <button type="button" id="burger" title="Menu" aria-label="Menu"></button>
+  <img class="logo" src="../assets/logo.jpg" alt="Broken by Mark Waldo Designs"/>
+  <button type="button" id="gear" title="Settings" aria-label="Settings"></button>
+</header>
+<hr class="rule"/>
+<div class="searchrow">
+  <span class="srchic" id="srchic"></span>
+  <input id="q" type="search" placeholder="Search media…" autocomplete="off" disabled title="Search available when a library is connected"/>
+</div>
+<main class="wrap">
+  <h1 class="title">MEDIA</h1>
+  <p class="sub" id="statusLine">Loading player…</p>
+  <section class="plate stage" id="stage" aria-label="Video stage">
+    <div class="vframe">
+      <div class="pending" id="pending"><h2>VIDEO PENDING</h2><p>No source configured.</p></div>
+      <div id="ytHost"></div>
+      <video id="vid" playsinline webkit-playsinline preload="metadata"></video>
+      <button type="button" class="tap" id="tap" hidden>TAP FOR SOUND</button>
+    </div>
+    <p class="note" id="glowNote">Neon glow is decorative (not beat-synced). True audio-reactive glow needs an MP4.</p>
+    <div class="meta">
+      <span>Quality <b id="qual">YouTube</b></span>
+      <span>Status <b id="st">Starting…</b></span>
+    </div>
+    <div class="progress">
+      <span id="t0">0:00</span>
+      <input id="seek" type="range" min="0" max="1000" value="0" step="1" disabled aria-label="Seek"/>
+      <span id="t1">—:—</span>
+    </div>
+    <div class="ctrls">
+      <button type="button" id="prev" disabled title="Previous (single clip)" aria-label="Previous"></button>
+      <button type="button" id="play" class="main" disabled title="Play" aria-label="Play"></button>
+      <button type="button" id="next" disabled title="Next (single clip)" aria-label="Next"></button>
+      <button type="button" id="loop" disabled title="Loop" aria-label="Loop" aria-pressed="false"></button>
+    </div>
+    <div class="vol">
+      <span id="volIc"></span>
+      <input id="vol" type="range" min="0" max="100" step="1" value="85" disabled aria-label="Volume"/>
+      <span id="volPct">—</span>
+    </div>
+    <div class="row2">
+      <button type="button" id="fs" disabled title="Fullscreen">FULLSCREEN</button>
+      <button type="button" id="muteBtn" disabled title="Mute">MUTE</button>
+    </div>
+  </section>
+</main>
+<nav class="bbar" aria-label="Primary">
+  <a href="../"><span data-ic="home"></span>Home</a>
+  <a href="./" aria-current="page"><span data-ic="videos"></span>Media</a>
+  <a href="../#favs"><span data-ic="favs"></span>Favorites</a>
+  <a href="../#clothing"><span data-ic="apparel"></span>Categories</a>
+  <a href="../#more"><span data-ic="gear"></span>Settings</a>
+</nav>
+<script src="../assets/broken-ui.js"></script>
+<script>
+(() => {
+  const YT_ID = 'KiIQMuO5kOU';
+  /* Future native file: set MP4_SRC to '../assets/media/mark-clip.mp4' and leave YT_ID '' to use analyser path */
+  const MP4_SRC = '';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $ = id => document.getElementById(id);
+  const stage = $('stage'), pending = $('pending'), vid = $('vid');
+  const seek = $('seek'), vol = $('vol'), play = $('play'), loopBtn = $('loop');
+  const tap = $('tap'), muteBtn = $('muteBtn'), fs = $('fs');
+  let player = null, ready = false, looping = false, unlocked = false, tickTimer = null, mode = YT_ID ? 'yt' : (MP4_SRC ? 'mp4' : 'none');
+
+  /* kill competing theme song */
+  try { document.querySelectorAll('audio#song, audio').forEach(a => { a.pause(); a.muted = true; a.removeAttribute('src'); }); } catch (_) {}
+
+  function iconize() {
+    const put = (el, name) => { if (el && window.BRKicon) el.innerHTML = BRKicon(name); };
+    put($('burger'), 'burger'); put($('gear'), 'gear'); put($('srchic'), 'search');
+    put(play, 'play'); put($('prev'), 'prev'); put($('next'), 'next'); put(loopBtn, 'reset');
+    put($('volIc'), 'sound');
+    document.querySelectorAll('.bbar [data-ic]').forEach(n => { n.outerHTML = BRKicon(n.dataset.ic); });
+  }
+  iconize(); setTimeout(iconize, 80);
+
+  function fmt(t) {
+    if (!Number.isFinite(t) || t < 0) return '—:—';
+    const m = Math.floor(t / 60), s = Math.floor(t % 60);
+    return m + ':' + String(s).padStart(2, '0');
+  }
+  function setPlayingUI(on) {
+    play.innerHTML = on
+      ? '<svg class="bic" viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>'
+      : (window.BRKicon ? BRKicon('play') : '▶');
+    play.setAttribute('aria-label', on ? 'Pause' : 'Play');
+  }
+  function putVolIcon(muted) {
+    if (window.BRKicon) $('volIc').innerHTML = BRKicon(muted ? 'muted' : 'sound');
+  }
+  function enableControls(on) {
+    [play, seek, vol, loopBtn, muteBtn, fs].forEach(el => { el.disabled = !on; });
+    $('prev').disabled = true; $('next').disabled = true;
+  }
+
+  /* ——— YouTube path (no Web Audio; decorative glow only) ——— */
+  function ytDuration() { try { return player.getDuration() || 0; } catch (_) { return 0; } }
+  function ytTime() { try { return player.getCurrentTime() || 0; } catch (_) { return 0; } }
+  function syncSeek() {
+    if (!ready || !player) return;
+    const d = ytDuration();
+    if (d > 0) {
+      $('t1').textContent = fmt(d);
+      seek.value = Math.round((ytTime() / d) * 1000);
+      $('t0').textContent = fmt(ytTime());
+    }
+  }
+  function startTick() { clearInterval(tickTimer); tickTimer = setInterval(syncSeek, 400); }
+  function stopTick() { clearInterval(tickTimer); }
+
+  function onYtReady(e) {
+    ready = true;
+    enableControls(true);
+    $('statusLine').textContent = 'Broken · YouTube';
+    $('st').textContent = 'Ready';
+    $('qual').textContent = 'YouTube embed';
+    $('volPct').textContent = vol.value + '%';
+    putVolIcon(true);
+    const d = ytDuration();
+    if (d) $('t1').textContent = fmt(d);
+    /* muted autoplay attempt */
+    try {
+      player.mute();
+      player.setVolume(0);
+      player.playVideo();
+    } catch (_) {}
+  }
+  function onYtState(e) {
+    const S = window.YT.PlayerState;
+    if (e.data === S.PLAYING) {
+      setPlayingUI(true); startTick();
+      $('st').textContent = unlocked ? 'Playing' : 'Playing (muted)';
+      if (!unlocked) { tap.hidden = false; tap.classList.add('show'); }
+    } else if (e.data === S.PAUSED) {
+      setPlayingUI(false); stopTick(); $('st').textContent = 'Paused';
+    } else if (e.data === S.ENDED) {
+      if (looping) { player.seekTo(0, true); player.playVideo(); }
+      else { setPlayingUI(false); stopTick(); $('st').textContent = 'Ended'; }
+    }
+  }
+
+  function loadYouTube() {
+    pending.classList.remove('show');
+    $('glowNote').textContent = 'Neon glow is decorative (not beat-synced). True audio-reactive glow needs an MP4 on this page.';
+    window.onYouTubeIframeAPIReady = function () {
+      player = new YT.Player('ytHost', {
+        videoId: YT_ID,
+        width: '100%',
+        height: '100%',
+        playerVars: {
+          autoplay: 1, mute: 1, playsinline: 1, rel: 0, modestbranding: 1,
+          controls: 0, fs: 0, iv_load_policy: 3, disablekb: 1, origin: location.origin
+        },
+        events: { onReady: onYtReady, onStateChange: onYtState, onError: ev => {
+          $('st').textContent = 'YouTube error ' + ev.data;
+          $('statusLine').textContent = 'Embed error';
+          pending.classList.add('show');
+          pending.querySelector('p').textContent = 'YouTube could not play this video here (error ' + ev.data + ').';
+          enableControls(false);
+        }}
+      });
+    };
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+  }
+
+  play.onclick = () => {
+    if (!ready || !player) return;
+    const S = YT.PlayerState;
+    const st = player.getPlayerState();
+    if (st === S.PLAYING || st === S.BUFFERING) player.pauseVideo();
+    else player.playVideo();
+  };
+  tap.onclick = e => {
+    e.stopPropagation();
+    if (!player) return;
+    player.unMute();
+    player.setVolume(+vol.value);
+    unlocked = true;
+    tap.classList.remove('show'); tap.hidden = true;
+    muteBtn.textContent = 'MUTE';
+    putVolIcon(false);
+    $('volPct').textContent = vol.value + '%';
+    $('st').textContent = 'Playing';
+    player.playVideo();
+  };
+  loopBtn.onclick = () => {
+    looping = !looping;
+    loopBtn.classList.toggle('on', looping);
+    loopBtn.setAttribute('aria-pressed', looping ? 'true' : 'false');
+  };
+  seek.oninput = () => {
+    if (!ready || !player) return;
+    const d = ytDuration(); if (!d) return;
+    player.seekTo((seek.value / 1000) * d, true);
+  };
+  vol.oninput = () => {
+    if (!player) return;
+    player.setVolume(+vol.value);
+    $('volPct').textContent = vol.value + '%';
+    if (+vol.value > 0 && unlocked) { player.unMute(); putVolIcon(false); }
+    if (+vol.value === 0) putVolIcon(true);
+  };
+  muteBtn.onclick = () => {
+    if (!player) return;
+    if (!unlocked) { tap.click(); return; }
+    if (player.isMuted() || player.getVolume() === 0) {
+      player.unMute(); player.setVolume(+vol.value || 85); muteBtn.textContent = 'MUTE'; putVolIcon(false);
+    } else {
+      player.mute(); muteBtn.textContent = 'UNMUTE'; putVolIcon(true);
+    }
+  };
+  fs.onclick = async () => {
+    const box = stage;
+    try {
+      if (!document.fullscreenElement) await box.requestFullscreen?.();
+      else await document.exitFullscreen();
+    } catch (_) { $('st').textContent = 'Fullscreen unavailable'; }
+  };
+  $('burger').onclick = () => location.href = '../#more';
+  $('gear').onclick = () => location.href = '../#more';
+
+  /* ——— Future MP4 analyser path (kept for when Mark supplies a file) ——— */
+  function loadMp4() {
+    mode = 'mp4';
+    $('ytHost').style.display = 'none';
+    vid.style.display = 'block';
+    vid.src = MP4_SRC;
+    $('glowNote').textContent = 'Audio-reactive neon uses Web Audio on this MP4 soundtrack.';
+    /* Analyser wiring lives here when MP4_SRC is set — intentionally unused for YouTube. */
+    enableControls(true);
+    vid.muted = true;
+    vid.play().then(() => {
+      ready = true; unlocked = false;
+      tap.hidden = false; tap.classList.add('show');
+      $('statusLine').textContent = 'Broken · MP4';
+      setPlayingUI(true);
+    }).catch(() => { $('st').textContent = 'Ready — tap play'; ready = true; });
+    vid.onloadedmetadata = () => {
+      $('t1').textContent = fmt(vid.duration);
+      $('qual').textContent = (vid.videoHeight || 0) + 'p · ' + vid.videoWidth + '×' + vid.videoHeight;
+    };
+  }
+
+  if (mode === 'yt') loadYouTube();
+  else if (mode === 'mp4') loadMp4();
+  else {
+    pending.classList.add('show');
+    $('statusLine').textContent = 'Video pending · player ready';
+    $('st').textContent = 'Waiting for video';
+  }
+})();
+</script>
+</body>
+</html>
